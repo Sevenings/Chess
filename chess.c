@@ -96,6 +96,53 @@ int podeMoverCavalo(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaIn
     return 0;
 }
 
+int podeMoverPeao(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
+    verificarEntradasMovimento(cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+
+    // Não existe movimento em que a Peça não saia do lugar
+    if (linhaInicial == linhaFinal && colunaInicial == colunaFinal) {
+        return 0;
+    }
+    // Caso o destino seja uma peça de mesma cor não é possível
+    if (TabuleiroGetCor(tabuleiro, linhaFinal, colunaFinal) == cor)
+        return 0;
+
+    // Indica a "direção" em que a peça olha
+    int facing = 2*cor - 1;     // Branco -> -1
+                                // Preto -> +1
+    // Indica a linha em que o peão começa
+    int linhaNatal = -5*cor + 6;  // Branco -> 6
+                                 // Preto -> 1
+    // Linha da frente do peão
+    int linhaDaFrente = linhaInicial + facing;
+
+    // Se o movimento for de andar reto
+    if (colunaInicial == colunaFinal) {
+        // Se a casa da frente estiver ocupada, não pode
+        if (TabuleiroGetTipoPeca(tabuleiro, linhaDaFrente, colunaInicial) != NA)
+            return 0;
+        // Se o movimento for "Andar 1 para frente", pode
+        if (linhaFinal == linhaDaFrente)
+            return 1;
+        
+        // Caso seja o primeiro movimento do peão, ele quer andar 2 casas, e a final não está ocupada, pode
+        int linhaDuasAfrente = linhaInicial + 2*facing;
+        if (linhaInicial == linhaNatal && linhaFinal == linhaDuasAfrente && !TabuleiroTemPeca(tabuleiro, linhaFinal, colunaInicial)) {
+            return 1;
+        }
+    }
+
+    // Se o movimento for de capturar
+    int dist_coluna = abs(colunaFinal - colunaInicial);
+    // Se for na casa da diagonal para frente e tiver alguém, pode
+    if (dist_coluna == 1 && linhaFinal == linhaDaFrente && TabuleiroTemPeca(tabuleiro, linhaFinal, colunaFinal)) {
+        return 1;
+    }
+
+    // Do contrário, não pode
+    return 0;
+}
+
 
 
 void print_tabuleiro(Tabuleiro tabuleiro) {
@@ -161,6 +208,10 @@ int foraTabuleiro(int linha, int coluna) {
     return 0;
 }
 
+int TabuleiroTemPeca(Tabuleiro tabuleiro, int linha, int coluna) {
+    return TabuleiroGet(tabuleiro, linha, coluna) != NA;
+}
+
 
 int main() {
     // Teste novoTabuleiro
@@ -180,7 +231,7 @@ int main() {
 
 
     // Teste TabuleiroMoverPeca
-    TabuleiroMoverPeca(t, 0, 0, 4, 0);
+    TabuleiroMoverPeca(t, 0, 0, 5, 0);
     print_tabuleiro(t);
 
     // Teste podeMoverTorre
@@ -198,4 +249,17 @@ int main() {
     } else {
         printf("Movimento inválido ");
     } printf("de Cavalo\n");
+
+    // Teste podeMoverPeao
+    podeMover = podeMoverPeao(t, PRETO, 3, 0, 4, 0);
+    if (podeMover) {
+        printf("Movimento válido ");
+    } else {
+        printf("Movimento inválido ");
+    } printf("de Peao\n");
+
+    printf("BRANCO: %d\n", BRANCO);
+    printf("PRETO: %d\n", PRETO);
+    printf("NO_COLOR: %d\n", NO_COLOR);
+
 }

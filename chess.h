@@ -34,8 +34,8 @@ typedef enum TipoPeca {
 } TipoPeca;
 
 typedef enum Cor {
-    BRANCO,
-    PRETO,
+    BRANCO=0,
+    PRETO=1,
     NO_COLOR
 } Cor;
 
@@ -55,3 +55,4 @@ void TabuleiroMoverPeca(Tabuleiro t, int linhaInicial, int colunaInicial, int li
 int foraTabuleiro(int linha, int coluna);
 void verificarEntradasMovimento(Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
 int podeMoverCavalo(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
+int TabuleiroTemPeca(Tabuleiro tabuleiro, int linha, int coluna);
