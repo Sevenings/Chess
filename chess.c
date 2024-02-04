@@ -17,7 +17,6 @@ const ID_PECA tabuleiro_inicial[8][8] = {
 };
 
 
-
 void verificarEntradasMovimento(Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
     // Verificações de validade das entradas
     assert(!foraTabuleiro(linhaInicial, colunaInicial));
@@ -32,7 +31,7 @@ int podeMoverTorre(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaIni
     if (linhaInicial == linhaFinal && colunaInicial == colunaFinal) {
         return 0;
     }
-    // Caso o destino seja uma peça de mesma cor não é possível
+    // Caso o destino seja uma peça de mesma cor, não é possível
     if (TabuleiroGetCor(tabuleiro, linhaFinal, colunaFinal) == cor)
         return 0;
 
@@ -67,7 +66,7 @@ int podeMoverTorre(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaIni
     }
 
     // Passando por todos os testes, é possível
-    return 1;
+return 1;
 }
 
 
@@ -93,7 +92,7 @@ int podeMoverCavalo(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaIn
     }
     
     // Do contrário, não é possível
-    return 0;
+return 0;
 }
 
 int podeMoverPeao(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
@@ -143,20 +142,157 @@ int podeMoverPeao(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInic
     return 0;
 }
 
+int podeMoverBispo(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
+    verificarEntradasMovimento(cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+    
+    // Não existe movimento em que a Peça não saia do lugar
+    if (linhaInicial == linhaFinal && colunaInicial == colunaFinal) {
+        return 0;
+    }
+
+    // Se o destino tiver peça da mesma cor, não pode
+    if (TabuleiroGetCor(tabuleiro, linhaFinal, colunaFinal) == cor)
+        return 0;
+
+    // Se movimento não for diagonal, não pode
+    int dLinha = linhaFinal - linhaInicial;
+    int dColuna = colunaFinal - colunaInicial;
+    if (abs(dLinha) != abs(dColuna)) {
+        return 0;
+    }
+
+    // dLinha e dColuna agora estão normalizados
+    dLinha = dLinha > 0 ? 1 : -1;
+    dColuna = dColuna > 0 ? 1 : -1;
+
+    // Se tiver peça no caminho, não pode
+    int l=linhaInicial+dLinha, c=colunaInicial+dColuna;
+    while (l != linhaFinal && c != colunaFinal) {
+        if (TabuleiroTemPeca(tabuleiro, l, c))
+            return 0;
+        l += dLinha; c += dColuna;
+    }
+
+    // Do contrário, pode
+    return 1;
+}
+
+
+int podeMoverDama(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
+    verificarEntradasMovimento(cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+    int podeBispo = podeMoverBispo(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+    int podeTorre = podeMoverTorre(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+    return podeBispo || podeTorre;
+}
+
+int podeMoverRei(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
+    verificarEntradasMovimento(cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+
+    // Não existe movimento em que a Peça não saia do lugar
+    if (linhaInicial == linhaFinal && colunaInicial == colunaFinal) {
+        return 0;
+    }
+
+    // Se o destino tiver peça da mesma cor, não pode
+    if (TabuleiroGetCor(tabuleiro, linhaFinal, colunaFinal) == cor)
+        return 0;
+
+    int dLinha = linhaFinal - linhaInicial;
+    int dColuna = colunaFinal - colunaInicial;
+    
+    // O alcançe do rei é nos quadrados ao redor
+    if (abs(dLinha) > 1 || abs(dColuna) > 1)
+        return 0;
+
+    Tabuleiro tabuleiroSemRei = TabuleiroCopy(tabuleiro);
+    TabuleiroSet(tabuleiroSemRei, linhaInicial, colunaInicial, NA);
+
+    // Verificar se o quadrado escolhido está em cheque
+    for (int coluna = 0; coluna < 8; coluna++) {   // Varrer o tabuleiro
+    for (int linha = 0; linha < 8; linha++) {
+        // Se tiver vazio, ou tiver mesma cor, pula
+        if (!TabuleiroTemPeca(tabuleiro, linha, coluna) || TabuleiroGetCor(tabuleiro, linha, coluna) == cor)    
+            continue;
+
+        // Se a posição estiver em cheque, não pode
+        if (TabuleiroGetTipoPeca(tabuleiro, linha, coluna) != REI) {    // Se não for Rei é esse calculo
+            if (podeMover(tabuleiroSemRei, linha, coluna, linhaFinal, colunaFinal))
+                return 0;
+        } else {    // Se for, é esse outro cálculo
+            int dLinhaOutroRei = linhaFinal - linha;
+            int dColunaOutroRei = colunaFinal - coluna;
+            if (abs(dLinhaOutroRei) <= 1 && abs(dColunaOutroRei) <= 1) {
+                return 0;
+            }
+        }
+    }}
+
+    // Se não for barrado por nada, pode sim
+    return 1;
+}
+
+
+int podeMover(Tabuleiro tabuleiro, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
+    int cor, peca;
+    TabuleiroGetPecaDetails(tabuleiro, linhaInicial, colunaInicial, &peca, &cor);
+
+    verificarEntradasMovimento(cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+
+    switch (peca) {
+        case PEAO:
+            return podeMoverPeao(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+            break;
+        case BISPO:
+            return podeMoverBispo(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+            break;
+        case CAVALO:
+            return podeMoverCavalo(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+            break;
+        case TORRE:
+            return podeMoverTorre(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+            break;
+        case DAMA:
+            return podeMoverDama(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+            break;
+        case REI:
+            return podeMoverRei(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+            break;
+        default:
+            return 0;
+    }
+}
 
 
 void print_tabuleiro(Tabuleiro tabuleiro) {
+    int valor;
     for (int lin=0; lin<8; lin++) {
         for (int col=0; col<8; col++) {
-            printf("%d ", tabuleiro[8*lin + col]);
+            valor = tabuleiro[8*lin + col];
+            if (valor < 10) printf(" ");
+            printf("%d ", valor);
         }
         printf("\n");
     }
 }
 
 
+Tabuleiro allocTabuleiro () {
+    return (Tabuleiro) malloc(64*sizeof(ID_PECA));
+}
+
+Tabuleiro novoTabuleiroVazio() {
+    Tabuleiro tabuleiro = allocTabuleiro();
+
+    for (int lin=0; lin<8; lin++) {
+        for (int col=0; col<8; col++) {
+            tabuleiro[8*lin + col] = NA;
+        }
+    }
+    return tabuleiro;
+}
+
 Tabuleiro novoTabuleiro() {
-    Tabuleiro tabuleiro = (Tabuleiro) malloc(64*sizeof(ID_PECA));
+    Tabuleiro tabuleiro = allocTabuleiro();
 
     for (int lin=0; lin<8; lin++) {
         for (int col=0; col<8; col++) {
@@ -164,6 +300,36 @@ Tabuleiro novoTabuleiro() {
         }
     }
     return tabuleiro;
+}
+
+Tabuleiro TabuleiroCopy(Tabuleiro tabuleiro) {
+    Tabuleiro tabuleiroCopia = allocTabuleiro();
+
+    for (int lin=0; lin<8; lin++) {
+        for (int col=0; col<8; col++) {
+            tabuleiroCopia[8*lin + col] = TabuleiroGet(tabuleiro, lin, col);
+        }
+    }
+    return tabuleiroCopia;
+}
+
+Tabuleiro mapaMovimentos(Tabuleiro tabuleiro, int linhaInicial, int colunaInicial) {
+    Tabuleiro mapa = novoTabuleiroVazio();
+
+    if (!TabuleiroTemPeca(tabuleiro, linhaInicial, colunaInicial)) {
+        return NULL;
+    }
+
+    for (int lin=0; lin<8; lin++) {
+        for (int col=0; col<8; col++) {
+            if (podeMover(tabuleiro, linhaInicial, colunaInicial, lin, col)) {
+                mapa[8*lin + col] = 1;
+            } else {
+                mapa[8*lin + col] = 0;
+            }
+        }
+    }
+    return mapa;
 }
 
 
@@ -235,24 +401,24 @@ int main() {
     print_tabuleiro(t);
 
     // Teste podeMoverTorre
-    int podeMover = podeMoverTorre(t, PRETO, 4, 0, 0, 0);
-    if (podeMover) {
+    int rPodeMover = podeMoverTorre(t, PRETO, 4, 0, 0, 0);
+    if (rPodeMover) {
         printf("Movimento válido ");
     } else {
         printf("Movimento inválido ");
     } printf("de Torre\n");
 
     // Teste podeMoverCavalo
-    podeMover = podeMoverCavalo(t, PRETO, 0, 1, 2, 2);
-    if (podeMover) {
+    rPodeMover = podeMoverCavalo(t, PRETO, 0, 1, 2, 2);
+    if (rPodeMover) {
         printf("Movimento válido ");
     } else {
         printf("Movimento inválido ");
     } printf("de Cavalo\n");
 
     // Teste podeMoverPeao
-    podeMover = podeMoverPeao(t, PRETO, 3, 0, 4, 0);
-    if (podeMover) {
+    rPodeMover = podeMoverPeao(t, PRETO, 3, 0, 4, 0);
+    if (rPodeMover) {
         printf("Movimento válido ");
     } else {
         printf("Movimento inválido ");
@@ -262,4 +428,23 @@ int main() {
     printf("PRETO: %d\n", PRETO);
     printf("NO_COLOR: %d\n", NO_COLOR);
 
+    TabuleiroMoverPeca(t, 6, 3, 4, 3);
+    print_tabuleiro(t);
+
+    rPodeMover = podeMoverBispo(t, BRANCO, 7, 2, 5, 4);
+    if (rPodeMover) {
+        printf("Movimento válido ");
+    } else {
+        printf("Movimento inválido ");
+    } printf("de Bispo\n");
+
+    TabuleiroMoverPeca(t, 7, 4, 5, 5);
+    print_tabuleiro(t);
+
+    Tabuleiro mapa_movimentos = mapaMovimentos(t, 5, 5);
+    if (mapa_movimentos) {
+        print_tabuleiro(mapa_movimentos);
+    } else {
+        printf("Casa Vazia");
+    }
 }
