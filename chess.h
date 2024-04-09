@@ -24,6 +24,8 @@ typedef enum ID_PECA {
     RP, RB
 } ID_PECA;
 
+typedef ID_PECA* Tabuleiro;
+
 typedef enum TipoPeca {
     PEAO=1,
     BISPO,
@@ -39,20 +41,30 @@ typedef enum Cor {
     NO_COLOR
 } Cor;
 
-typedef ID_PECA* Tabuleiro;
 
 
 // Tabuleiro
+// Alloca memória para um Tabuleiro
 Tabuleiro allocTabuleiro();
+
+// Aloca e Inicializa um novo tabuleiro
 Tabuleiro novoTabuleiro();
+
+// Imprime as peças de tabuleiro na tela
 void print_tabuleiro(Tabuleiro tabuleiro);
+
+// Getters e Setters
 ID_PECA TabuleiroGet(Tabuleiro t, int linha, int coluna);
 void TabuleiroSet(Tabuleiro t, int linha, int coluna, ID_PECA valor);
 void TabuleiroGetPecaDetails(Tabuleiro tabuleiro, int linha, int coluna, int *tipo, int *cor);
 Cor TabuleiroGetCor(Tabuleiro tabuleiro, int linha, int coluna);
 TipoPeca TabuleiroGetTipoPeca(Tabuleiro tabuleiro, int linha, int coluna);
+
 void TabuleiroMoverPeca(Tabuleiro t, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
+
+// Verifica se a posição está fora do Tabuleiro
 int foraTabuleiro(int linha, int coluna);
+
 int TabuleiroTemPeca(Tabuleiro tabuleiro, int linha, int coluna);
 Tabuleiro TabuleiroCopy(Tabuleiro tabuleiro);
 Tabuleiro mapaMovimentos(Tabuleiro tabuleiro, int linhaInicial, int colunaInicial);

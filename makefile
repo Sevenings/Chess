@@ -1,5 +1,5 @@
 build:
-	gcc -o Xadrez chess.c
+	gcc -o Xadrez chess.c movimentos.c tabuleiro.c textinput.c
 
 run:
 	./Xadrez

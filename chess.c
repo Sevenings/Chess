@@ -1,73 +1,60 @@
 #include <stdio.h>
 #include "chess.h"
+#include "textinput.h"
 
+void alternaVez(Cor*);
 
 int main() {
-    // Teste novoTabuleiro
-    Tabuleiro t = novoTabuleiro();
-    print_tabuleiro(t);
+    Tabuleiro tabuleiro = novoTabuleiro();
+    
+    char entrada[6+1];
+    int linhaInicial, colunaInicial, linhaFinal, colunaFinal;
 
+    Cor corDaVez = BRANCO;
 
+    int loop = 1;
+    while (loop) {
+        print_tabuleiro(tabuleiro);
 
-    // Teste TabuleiroGet e TabuleiroGetPeca
-    int x=1, y=0;
-    int v = TabuleiroGet(t, y, x);
-    printf("Valor na posicao (%d, %d): %d\n", x, y, v);
+        int movValido = 0;
+        while (!movValido) {
+            if (corDaVez == BRANCO) {
+                printf("Vez das Brancas:\n");
+            } else if (corDaVez == PRETO) {
+                printf("Vez das Pretas:\n");
+            }
+            printf("Digite um movimento [ex: e2->e4]:\n");
 
-    int id, cor;
-    TabuleiroGetPecaDetails(t, y, x, &id, &cor);
-    printf("Id: %d. Cor: %d\n", id, cor);
+            // Recebe a entrada
+            scanf("%s", entrada);
 
+            
+            if (!notacaoValida(entrada)) {
+                printf("Notação Inválida.\n");
+                continue;
+            }
+            traduzirNotacao(entrada, &linhaInicial, &colunaInicial, &linhaFinal, &colunaFinal);
 
-    // Teste TabuleiroMoverPeca
-    TabuleiroMoverPeca(t, 0, 0, 5, 0);
-    print_tabuleiro(t);
+            if (corDaVez != TabuleiroGetCor(tabuleiro, linhaInicial, colunaInicial)) {
+                printf("Movendo peça da cor errada!\n");
+                continue;
+            }
+            if (!podeMover(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal)) {
+                printf("Movimento Inválido!\n");
+                continue;
+            }
+            movValido = 1;
+        }
+        TabuleiroMoverPeca(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+        alternaVez(&corDaVez);
+    }
+}
 
-    // Teste podeMoverTorre
-    int rPodeMover = podeMoverTorre(t, PRETO, 4, 0, 0, 0);
-    if (rPodeMover) {
-        printf("Movimento válido ");
-    } else {
-        printf("Movimento inválido ");
-    } printf("de Torre\n");
-
-    // Teste podeMoverCavalo
-    rPodeMover = podeMoverCavalo(t, PRETO, 0, 1, 2, 2);
-    if (rPodeMover) {
-        printf("Movimento válido ");
-    } else {
-        printf("Movimento inválido ");
-    } printf("de Cavalo\n");
-
-    // Teste podeMoverPeao
-    rPodeMover = podeMoverPeao(t, PRETO, 3, 0, 4, 0);
-    if (rPodeMover) {
-        printf("Movimento válido ");
-    } else {
-        printf("Movimento inválido ");
-    } printf("de Peao\n");
-
-    printf("BRANCO: %d\n", BRANCO);
-    printf("PRETO: %d\n", PRETO);
-    printf("NO_COLOR: %d\n", NO_COLOR);
-
-    TabuleiroMoverPeca(t, 6, 3, 4, 3);
-    print_tabuleiro(t);
-
-    rPodeMover = podeMoverBispo(t, BRANCO, 7, 2, 5, 4);
-    if (rPodeMover) {
-        printf("Movimento válido ");
-    } else {
-        printf("Movimento inválido ");
-    } printf("de Bispo\n");
-
-    TabuleiroMoverPeca(t, 7, 4, 5, 5);
-    print_tabuleiro(t);
-
-    Tabuleiro mapa_movimentos = mapaMovimentos(t, 5, 5);
-    if (mapa_movimentos) {
-        print_tabuleiro(mapa_movimentos);
-    } else {
-        printf("Casa Vazia");
+void alternaVez(Cor *corDaVez) {
+    // Passa a vez para o outro jogador
+    if (*corDaVez == BRANCO) {
+        *corDaVez = PRETO;
+    } else if (*corDaVez == PRETO) {
+        *corDaVez = BRANCO;
     }
 }
