@@ -7,9 +7,9 @@ para poder, a partir desse projeto, complementá-lo com outras
 coisas.
 
 Os próximos passos seriam, após completar o sistema de terminal:
-    - Encobrir com uma interface visual daora.
-    - Tornar o jogo online.
-    - Embarcar em um hardware tipo Arduino.
+  - Encobrir com uma interface visual daora.
+  - Tornar o jogo online.
+  - Embarcar em um hardware tipo Arduino.
 Não necessariamente nessa ordem.
 
 Nessa de encobrir a API com uma interface visual daora, já penso em
