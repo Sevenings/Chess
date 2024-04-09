@@ -9,7 +9,9 @@ coisas.
 Os próximos passos seriam, após completar o sistema de terminal:
   - Encobrir com uma interface visual daora.
   - Tornar o jogo online.
-  - Embarcar em um hardware tipo Arduino.
+  - Embarcar em um hardware tipo Arduino, rodar no LCD.
+  - Fazer um hardware físico com peças magnéticas. (Xadrez de Bruxo)
+  - Fazer input por voz usando NLP. (XADREZ DE BRUUXOO)
 
 _Não necessariamente nessa ordem._
 
