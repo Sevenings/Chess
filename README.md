@@ -10,7 +10,8 @@ Os próximos passos seriam, após completar o sistema de terminal:
   - Encobrir com uma interface visual daora.
   - Tornar o jogo online.
   - Embarcar em um hardware tipo Arduino.
-Não necessariamente nessa ordem.
+
+_Não necessariamente nessa ordem._
 
 Nessa de encobrir a API com uma interface visual daora, já penso em
 usar o OpenGL, com gráficos 3D e tudo mais. Seria lindo demais, só
