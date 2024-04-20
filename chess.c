@@ -47,6 +47,7 @@ int main() {
         }
         TabuleiroMoverPeca(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
         alternaVez(&corDaVez);
+
     }
 }
 
