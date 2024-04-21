@@ -7,32 +7,29 @@
 
 #include <netinet/in.h>
 
-#include "messages_constants.h"
+#include "chess_net.h"
 
 
 
 void loop(int network_socket) {
-    Message server_response;
+    Message* server_response = newMessage(MY_PLAY, "Mensagem Inicial");
     char message[MESSAGE_LEN];
     
-    while (isMessageCode(server_response, END_GAME)) {
-        recv(network_socket, server_response, MESSAGE_LEN, 0);
-        printf("Recebido do Server: '%s'\n", server_response);
+    // Se END_GAME o jogo fecha
+    while (!isMessageCode(server_response, END_GAME)) {
+
+        // Aguarda sempre por uma mensagem do server.
+        server_response = recvMessage(network_socket);
+        printf("Recebido do Server: '%s'\n", server_response->conteudo);
 
 
-        switch (server_response) {
-            case YOUR_TURN:
-        }
-
-        if (strcmp(server_response, YOUR_TURN) != 0) {
+        if (!isMessageCode(server_response, YOUR_TURN)) {
             printf("Não é minha vez\n");
-            system("clear");
-            continue;
+        } else if (isMessageCode(server_response, YOUR_TURN)) {
+            printf("Minha vez. Escrevo minha jogada:\n");
+            scanf(" %s", message);
+            sendMessage(network_socket, MY_PLAY, message);
         }
-
-        printf("Minha vez. Escrevo minha jogada:\n");
-        scanf(" %s", message);
-        send(network_socket, message, MESSAGE_LEN, 0);
     }
 }
 
@@ -40,6 +37,7 @@ void loop(int network_socket) {
 
 int main() {
 
+    // Protocolo de conexão com o servidor
     // Create a socket
     int network_socket;
     network_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -65,7 +63,7 @@ int main() {
     // Mostrar a resposta do servidor
     printf("Resposta do servidor: '%s'\n", resposta);
 
-    // Enters the client main loop
+    // Começa o loop principal do cliente
     loop(network_socket);
 
     // Fechar o socket

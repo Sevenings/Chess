@@ -7,10 +7,10 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "messages_constants.h"
+#include "chess_net.h"
 
 
-void getJogada(int, char*);
+char* getJogada(int player_socket);
 
 
 // define the server address
@@ -27,36 +27,44 @@ struct sockaddr_in socket_address(sa_family_t family, int port, in_addr_t addres
 
 
 void loop(int p1_socket, int p2_socket) {
-    char response[256];
+    char *jogada;
 
     int turn = 0;   // 0 -> p1; 1 -> p2;
-    while (strncmp(response, END_RESPONSE, strlen(END_RESPONSE)) != 0) {
+    do {
+        // Receber jogada do jogador
         if (turn == 0) {
-            getJogada(p1_socket, response);
-            printf("Jogada player 1: %s\n", response);
+            jogada = getJogada(p1_socket);
+            printf("Jogada player 1: %s\n", jogada);
         } else {
-            getJogada(p2_socket, response);
-            printf("Jogada player 2: %s\n", response);
+            jogada = getJogada(p2_socket);
+            printf("Jogada player 2: %s\n", jogada);
         }
 
-
-
-        if (turn == 0) 
+        // Trocar turno
+        if (turn == 0) {
             turn = 1;
-        else 
+        } else {
             turn = 0;
-    }
+        }
+    } while (1);
 }
 
 
 
-void getJogada(int player_socket, char *resultado) {
-    send(player_socket, YOUR_TURN, MESSAGE_LEN, 0);
+char* getJogada(int player_socket) {
+    sendMessage(player_socket, YOUR_TURN, "Sua vez de jogar\n");
 
-    char resposta[MESSAGE_LEN];
-    recv(player_socket, &resposta, MESSAGE_LEN, 0);
+    Message *resposta;
+    resposta = recvMessage(player_socket);
+    if (!isMessageCode(resposta, MY_PLAY)) {
+        // retorna erro? 
+        // pede novamente?
+        printf("Resposta não é jogada\n");
+    }
+    printf("Jogada recebida: %s\n", resposta->conteudo);
 
-    strcpy(resultado, resposta);
+    // Recebe a jogada
+    return resposta->conteudo;
 }
 
 
