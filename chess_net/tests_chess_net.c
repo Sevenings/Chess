@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <sys/socket.h>
-#include "chess_net.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+
+#include "chess_net.h"
 
 
 void alloc_test() {

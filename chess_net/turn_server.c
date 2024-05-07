@@ -8,14 +8,14 @@
 #include <sys/socket.h>
 
 #include "chess_net.h"
+#include "turn_server.h"
 
 
 void waitJogada(int player_socket, char* jogada);
 
-
-void loopServer(
+void loopTurnServer(
         int p1_socket, 
-        int p2_socket, 
+        int p2_socket,
         int (*isValid)(char* jogada),
         void (*applyPlay)(int p_socket, char* jogada)
     ) {
@@ -34,7 +34,7 @@ void loopServer(
             waitJogada(selected_socket, jogada);
             printf("[Loop Server] Jogada player %d: %s\n", turn+1, jogada);
             
-            // Verificar validade Jogada
+            // Verifica validade Jogada
         } while (isValid(jogada) != 1);
 
         // Caso Valida Aplica a Jogada
@@ -80,23 +80,17 @@ void waitJogada(int player_socket, char *jogada) {
 
 
 
-
-
-int main() {
-    // Parâmetros de conexão
-    in_addr_t address = INADDR_ANY;
-    int port = 65432;
-
-    // Sobe o server
-    int server_socket, p1_socket, p2_socket;
-    hostServer(&server_socket, &p1_socket, &p2_socket, address, port);
-
-    // Enters the game main loop
-    loopServer(p1_socket, p2_socket);   // APLICAR ATUALIZAÇÃO
-
-    // Close connection
-    close(server_socket);
-
-    return 0;
-}
+// Exemplo de server
+// Sobe um server e roda seu game loop
+/*
+ *  // Abre o server
+ *  int server_socket, p1_socket, p2_socket;
+ *  hostServer(&server_socket, &p1_socket, &p2_socket, address, port);
+ *  
+ *  // Roda o Loop Principal do Server
+ *  //loopTurnServer(p1_socket, p2_socket);   
+ *
+ *  // Quando o server fechar, feche a conexão socket
+ *  close(server_socket);
+ */
 

@@ -16,11 +16,10 @@ void loopClient(int network_socket) {
     do {
         // Aguarda sempre por uma mensagem do server.
         recvMessage(network_socket, server_response);
-        printf("Recebido do Server: '%s'\n", server_response->conteudo);
+        //printf("Recebido do Server: '%s'\n", server_response->conteudo);
 
-
-        if (!isMessageCode(server_response, YOUR_TURN)) {
-            printf("Não é minha vez\n");
+        if (isMessageCode(server_response, OTHER_PLAY)) {
+            printf("O outro jogador jogou: %s\n", server_response->conteudo);
         } else if (isMessageCode(server_response, YOUR_TURN)) {
             printf("Minha vez. Escrevo minha jogada:\n");
             scanf(" %s", message);

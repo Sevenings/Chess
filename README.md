@@ -18,3 +18,12 @@ _Não necessariamente nessa ordem._
 Nessa de encobrir a API com uma interface visual daora, já penso em
 usar o OpenGL, com gráficos 3D e tudo mais. Seria lindo demais, só
 pelo desafio.
+
+
+### Atualizações
+
+Feitas:
+ * Criei a abstração turn\_server para depois juntar com a API de xadrez e fazer um chess\_server
+
+Próxima:
+ * Fazer com o turn\_client o mesmo que eu fiz com o turn\_server.

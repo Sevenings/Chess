@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "chess.h"
-#include "textinput.h"
+#include "chess_engine/chess.h"
+#include "chess_engine/textinput.h"
 
 void alternaVez(Cor*);
 
