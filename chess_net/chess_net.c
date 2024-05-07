@@ -74,6 +74,7 @@ int isMessageCode(Message* message, Codigo codigo) {
 }
 
 
+// Envia uma mensagem para um Socket
 int sendMessage(int socket, Codigo codigo, const char *conteudo) {
 
     // Converte o código e conteudo para string
@@ -107,6 +108,7 @@ void recvMessage(int socket, Message* output) {
     stringToMessage(mensagem_string, output);
 }
 
+
 // Se conecta ao servidor e retorna o número do socket de conexão
 void connectToServer(int* pnetwork_socket, in_addr_t address, int port) {
     
@@ -136,6 +138,7 @@ void connectToServer(int* pnetwork_socket, in_addr_t address, int port) {
     // Mostrar a resposta do servidor
     printf("Resposta do servidor: '%s'\n", resposta);
 }
+
 
 // Sobe um server em um determinado IP e PORTA. Aguarda player 1 e 2 se conectarem.
 void hostServer(int* pserver_socket, int* pp1_socket, int* pp2_socket, in_addr_t address, int port) {
