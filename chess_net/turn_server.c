@@ -16,8 +16,8 @@ void waitJogada(int player_socket, char* jogada);
 void loopTurnServer(
         int p1_socket, 
         int p2_socket,
-        int (*isValid)(char* jogada),
-        void (*applyPlay)(int p_socket, char* jogada)
+        int (*isValid)(int turn, const char* jogada),
+        void (*applyPlay)(int p_socket, const char* jogada)
     ) {
     // Aloca algumas variaveis iniciais
     char jogada[MESSAGE_LEN];
@@ -35,7 +35,7 @@ void loopTurnServer(
             printf("[Loop Server] Jogada player %d: %s\n", turn+1, jogada);
             
             // Verifica validade Jogada
-        } while (isValid(jogada) != 1);
+        } while (isValid(turn, jogada) != 1);
 
         // Caso Valida Aplica a Jogada
         applyPlay(selected_socket, jogada);
@@ -57,6 +57,7 @@ void loopTurnServer(
         }
     } while (1);
 }
+
 
 
 

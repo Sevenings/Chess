@@ -244,3 +244,14 @@ int podeMover(Tabuleiro tabuleiro, int linhaInicial, int colunaInicial, int linh
             return 0;
     }
 }
+
+int jogadaValida(Tabuleiro tabuleiro, Cor vez, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal) {
+    // Se for a vez das Brancas e o movimento não for de Brancas, inválida.
+    if (vez == BRANCO && TabuleiroGetCor(tabuleiro, linhaInicial, colunaInicial) != BRANCO) return 0;
+    
+    // Se for a vez das Pretas e o movimento não for de Pretas, inválida
+    if (vez == PRETO && TabuleiroGetCor(tabuleiro, linhaInicial, colunaInicial) != PRETO) return 0;
+
+    // E se puder mover, então pode.
+    return podeMover(tabuleiro, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+}

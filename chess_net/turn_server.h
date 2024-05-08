@@ -22,6 +22,6 @@
 void loopTurnServer(
         int p1_socket, 
         int p2_socket,
-        int (*isValid)(char* jogada),
-        void (*applyPlay)(int p_socket, char* jogada)
+        int (*isValid)(int turn, const char* jogada),
+        void (*applyPlay)(int p_socket, const char* jogada)
     );
