@@ -26,6 +26,10 @@ Fiz:
  * Criei a abstração turn\_server para depois juntar com a API de xadrez e fazer um chess\_server
  * Fazer com o turn\_client o mesmo que eu fiz com o turn\_server.
  * Implementei o chess\_server.
+ * Implementar o client\_server.
 
 Próxima:
- * Implementar o client\_server.
+ * Implementar Roque
+ * Implementar Passante
+ * Implementar Xeque
+ * Implementar Xeque-Mate
