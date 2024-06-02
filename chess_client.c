@@ -37,9 +37,31 @@ void recvJogadaOutro(const char* jogada) {
 
 
 void fazerJogada(char* jogada_realizada) {
-    // Lê a jogada
-    printf("Sua jogada:\n");
-    scanf(" %s", jogada_realizada);
+    int linhaInicial, colunaInicial, linhaFinal, colunaFinal;
+    Cor cor;
+    int ehValida;
+
+    do {
+        // Lê a jogada
+        printf("Sua jogada:\n");
+        scanf(" %s", jogada_realizada);
+
+        // Verifica se a notação é válida
+        if (!notacaoValida(jogada_realizada)) {
+            printf("Notação Invalida. ex: [e2->e4]\n");
+            continue;
+        }
+
+        // Obtém os dados da jogada
+        traduzirNotacao(jogada_realizada, &linhaInicial, &colunaInicial, &linhaFinal, &colunaFinal);
+        cor = TabuleiroGetCor(tabuleiro, linhaInicial, linhaFinal);
+        
+        // Valida a jogada
+        ehValida = jogadaValida(tabuleiro, cor, linhaInicial, colunaInicial, linhaFinal, colunaFinal);
+        if (!ehValida) {
+            printf("Movimento Invalido!\n");
+        }
+    } while (!ehValida);
 
     // Aplica a jogada no próprio tabuleiro
     aplicarJogada(jogada_realizada);
