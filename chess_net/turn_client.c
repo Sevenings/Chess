@@ -1,6 +1,3 @@
-#include <sys/types.h>
-#include <sys/socket.h>
-
 #include "chess_net.h"
 #include "turn_client.h"
 
