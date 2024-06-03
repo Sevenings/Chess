@@ -1,8 +1,5 @@
-#include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
-
-#include <netinet/in.h>
 
 #include "chess_net.h"
 #include "turn_client.h"

@@ -1,11 +1,7 @@
-#include <bits/sockaddr.h>
-#include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
 
 #include "chess_net.h"
 #include "turn_server.h"
@@ -77,21 +73,4 @@ void waitJogada(int player_socket, char *jogada) {
     strcpy(jogada, resposta->conteudo); // Substituir strcpy
     free(resposta);
 }
-
-
-
-
-// Exemplo de server
-// Sobe um server e roda seu game loop
-/*
- *  // Abre o server
- *  int server_socket, p1_socket, p2_socket;
- *  hostServer(&server_socket, &p1_socket, &p2_socket, address, port);
- *  
- *  // Roda o Loop Principal do Server
- *  //loopTurnServer(p1_socket, p2_socket);   
- *
- *  // Quando o server fechar, feche a conexão socket
- *  close(server_socket);
- */
 

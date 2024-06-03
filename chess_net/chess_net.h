@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <netinet/in.h>
 
 
 #define MESSAGE_LEN 256
