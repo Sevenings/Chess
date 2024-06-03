@@ -57,9 +57,9 @@ void messageToString(Message* input, char* output);
 
 
 // Se Conecta a um Server como um Cliente, retornando o socket de conexão
-void connectToServer(int* pnetwork_socket, in_addr_t address, int port);
+void connectToServer(int* pnetwork_socket, const char* address, int port);
 
 
 // Sobe um server em um determinado IP e PORTA. Aguarda player 1 e 2 se conectarem.
-void hostServer(int* pserver_socket, int* pp1_socket, int* pp2_socket, in_addr_t address, int port);
+void hostServer(int* pserver_socket, int* pp1_socket, int* pp2_socket, const char* address, int port);
 

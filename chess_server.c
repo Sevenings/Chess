@@ -1,4 +1,5 @@
 #include <netinet/in.h>
+#include <stdio.h>
 
 #include "chess_net/chess_net.h"
 #include "chess_net/turn_server.h"
@@ -48,7 +49,7 @@ int isValid(int turn, const char* jogada) {
 
 
 
-void launchChessServer(in_addr_t address, int port) {
+void launchChessServer(const char* address, int port) {
     // Hostea o server no endereço de IP e porta fornecidos e 
     // aguarda pelos jogadores se conectarem
     int server_socket, p1_socket, p2_socket;
@@ -70,8 +71,15 @@ void launchChessServer(in_addr_t address, int port) {
 
 int main() {
 
-    in_addr_t address = INADDR_ANY;
-    int port = 65432;
+    char address[16];
+    int port;
+
+    // Digitar o Endereço e Porta onde Hospedar o Server
+    printf("Chess Server\n");
+    printf("Host on Ip: ");
+    scanf(" %s", address);
+    printf("on Port: ");
+    scanf(" %d", &port);
 
     launchChessServer(address, port);
 

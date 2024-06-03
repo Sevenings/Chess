@@ -72,7 +72,7 @@ void fazerJogada(char* jogada_realizada) {
 }
 
 
-void launchChessClient(in_addr_t address, int port) {
+void launchChessClient(const char* address, int port) {
     // Se conecta ao server especificado
     int network_socket, p1_socket, p2_socket;
     connectToServer(&network_socket, address, port);
@@ -94,8 +94,15 @@ void launchChessClient(in_addr_t address, int port) {
 
 int main() {
     // Parâmetros de conexão
-    in_addr_t address = INADDR_ANY;
-    int port = 65432;
+    char address[16];
+    int port;
+
+    // Digitar o Endereço e Porta onde Hospedar o Server
+    printf("Chess Client\n");
+    printf("Connect to Ip: ");
+    scanf(" %s", address);
+    printf("on Port: ");
+    scanf(" %d", &port);
 
     // Inicia o Client de Xadrez
     launchChessClient(address, port);

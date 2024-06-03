@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
+#include <arpa/inet.h>
+
 #include "chess_net.h"
 
 
@@ -110,7 +112,7 @@ void recvMessage(int socket, Message* output) {
 
 
 // Se conecta ao servidor e retorna o número do socket de conexão
-void connectToServer(int* pnetwork_socket, in_addr_t address, int port) {
+void connectToServer(int* pnetwork_socket, const char* address, int port) {
     
     // Protocolo de conexão com o servidor
     // Create a socket
@@ -120,7 +122,8 @@ void connectToServer(int* pnetwork_socket, in_addr_t address, int port) {
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(port);
-    server_address.sin_addr.s_addr = address;
+    inet_pton(AF_INET, address, &server_address.sin_addr);
+    //server_address.sin_addr.s_addr = address;
 
 
     // Conectar
@@ -141,7 +144,7 @@ void connectToServer(int* pnetwork_socket, in_addr_t address, int port) {
 
 
 // Sobe um server em um determinado IP e PORTA. Aguarda player 1 e 2 se conectarem.
-void hostServer(int* pserver_socket, int* pp1_socket, int* pp2_socket, in_addr_t address, int port) {
+void hostServer(int* pserver_socket, int* pp1_socket, int* pp2_socket, const char* address, int port) {
     // Mensagens de respostas de conexão
     char p1_response_message[256] = "You are player 1!";
     char p2_response_message[256] = "You are player 2!";
@@ -153,7 +156,8 @@ void hostServer(int* pserver_socket, int* pp1_socket, int* pp2_socket, in_addr_t
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(port);
-    server_address.sin_addr.s_addr = address;
+    inet_pton(AF_INET, address, &server_address.sin_addr);
+    //server_address.sin_addr.s_addr = address;
 
 
     // Bind the server to this address
