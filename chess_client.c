@@ -1,4 +1,3 @@
-#include <netinet/in.h>
 #include <stdio.h>
 
 #include "chess_net/chess_net.h"
