@@ -1,3 +1,10 @@
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    #pragma comment(lib, "ws2_32.lib")
+#endif
+
+
 #include <stdio.h>
 
 #include "chess_net/chess_net.h"
@@ -69,7 +76,17 @@ void launchChessServer(const char* address, int port) {
 
 
 int main() {
+    // Inicialização para o Windows
+    #ifdef _WIN32
+        WSADATA wsaData;
+        int result = WSAStartup(MAKEWORD(2,2), &wsaData);
+        if (result != 0) {
+            printf("WSAStartup failed: %d\n", result);
+            return 1;
+        }
+    #endif
 
+    // Parâmetros de conexão
     char address[16];
     int port;
 

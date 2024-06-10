@@ -1,3 +1,5 @@
+#ifndef CHESS_H
+#define CHESS_H
 
 #define max(a,b)             \
 ({                           \
@@ -80,3 +82,5 @@ int podeMoverDama(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInic
 int podeMoverRei(Tabuleiro tabuleiro, Cor cor, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
 int podeMover(Tabuleiro tabuleiro, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
 int jogadaValida(Tabuleiro tabuleiro, Cor vez, int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal);
+
+#endif
